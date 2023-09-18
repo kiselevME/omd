@@ -36,10 +36,11 @@ def step1():
     while option not in options:
         print('Выберите: {}/{}'.format(*options))
         option = input()
-    
+
     if options[option]:
         return step2_umbrella()
     return step2_no_umbrella()
+
 
 if __name__ == '__main__':
     step1()
