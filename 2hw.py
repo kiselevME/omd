@@ -37,9 +37,9 @@ def print_hierarchy(table: list) -> None:
         deps[item[:][1]].add(item[2])
 
     for dep in deps_nm:
-        print(f'{dep}:')
+        print('{}:'.format(dep))
         for item in deps[dep]:
-            print(f'\t{item}')
+            print('\t{}'.format(item))
 
 
 def create_report(table: list, mode: str) -> None:
@@ -76,29 +76,27 @@ def create_report(table: list, mode: str) -> None:
 
     if mode == 'print':
         for dep in deps_nm:
-            avg_sal = deps_info[dep]["sum_sal"]/deps_info[dep]["size"]
+            avg_sal = deps_info[dep]['sum_sal']/deps_info[dep]['size']
 
-            print(f'{dep}:')
-            print(f'\tnum of employees: {deps_info[dep]["size"]}')
-            print(f'\tsalary range: {deps_info[dep]["min_sal"]}–'
-                  f'{deps_info[dep]["max_sal"]}')
-            print(f'\tavg salary: {avg_sal}')
+            print('{}:'.format(dep))
+            print('\tnum of employees: {}'.format(deps_info[dep]['size']))
+            print('\tsalary range: {}–{}'.format(deps_info[dep]['min_sal'],
+                                                 deps_info[dep]['max_sal']))
+            print('\tavg salary: {}'.format(avg_sal))
     elif mode == 'save':
         table_columns = ['department', 'num of employees',
                          'salary range', 'avg salary']
-        # cоздаем файл (если он не существует)
-        with open('report.csv', 'a', newline='') as csvfile:
-            pass
         # записываем в файл
         with open('report.csv', 'w', newline='') as csvfile:
             csvfile.write(';'.join(table_columns)+'\n')
             for dep in deps_nm:
                 line = [dep,
                         str(deps_info[dep]['size']),
-                        f'{deps_info[dep]["min_sal"]}–'
-                        f'{deps_info[dep]["max_sal"]}',
+                        '{}–{}'.format(deps_info[dep]['min_sal'],
+                                       deps_info[dep]['max_sal']),
                         str(deps_info[dep]['sum_sal']/deps_info[dep]['size'])]
                 csvfile.write(';'.join(line)+'\n')
+        print('Отчет успешно сохранен в report.csv')
 
 
 if __name__ == '__main__':
