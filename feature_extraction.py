@@ -84,44 +84,86 @@ class CountVectorizer:
 
 
 class TfidfTransformer:
+    """Performs term frequency, inverse document frequency and
+    TF-IDF counting functions
+    """
+
     @staticmethod
-    def tf_transform(count: Iterable) -> list:
-        tf = [[item / sum(doc) for item in doc] for doc in count]
+    def tf_transform(count_matrix: Iterable) -> list:
+        """Converts the count matrix to term frequency
+
+        Args:
+            count_matrix (Iterable): Matrix, where the rows are documents,
+            the columns are words from the vocabulary,
+            and the cells are the number of word in the document
+
+        Returns:
+            list: term frequency matrix
+        """
+        tf = [[item / sum(doc) for item in doc] for doc in count_matrix]
         return tf
 
     @staticmethod
-    def idf_transform(count: Iterable) -> list:
-        docs_total = len(count)
-        voc_size = len(count[0])
+    def idf_transform(count_matrix: Iterable) -> list:
+        """Сonverts the count matrix to inverse document frequency
+
+        Args:
+            count_matrix (Iterable): Matrix, where the rows are documents,
+            the columns are words from the vocabulary,
+            and the cells are the number of word in the document
+
+        Returns:
+            list: inverse document frequency list
+        """
+        docs_total = len(count_matrix)
+        voc_size = len(count_matrix[0])
         # Документы со словом
-        docs_with_word = [sum([1 if count[i][j] > 0 else 0
-                               for i in range(docs_total)])
-                          for j in range(voc_size)]
+        docs_with_word = [
+            sum([1 if count_matrix[i][j] > 0 else 0
+                 for i in range(docs_total)])
+            for j in range(voc_size)
+        ]
         # Применяем формулу для IDF
         idf = [log((docs_total + 1) / (cnt + 1)) + 1 for cnt in docs_with_word]
         return idf
 
-    def fit_transform(self, count_corpus: Iterable) -> list:
-        tf_corp = self.tf_transform(count_corpus)
-        idf_corp = self.idf_transform(count_corpus)
-        tf_idf = [[round(tf*idf, 3) for tf, idf in zip(tf_line, idf_corp)]
-                  for tf_line in tf_corp]
+    def fit_transform(self, count_matrix: Iterable) -> list:
+        """Converts the count matrix to TF-IDF matrix
+        Args:
+            count_matrix (Iterable): Matrix, where the rows are documents,
+            the columns are words from the vocabulary,
+            and the cells are the number of word in the document
+
+        Returns:
+            list: TF-IDF matrix
+        """
+        tf_corp = self.tf_transform(count_matrix)
+        idf_corp = self.idf_transform(count_matrix)
+        tf_idf = [
+            [round(tf * idf, 3) for tf, idf in zip(tf_line, idf_corp)]
+            for tf_line in tf_corp
+        ]
         return tf_idf
 
 
-class TFIDF_Vectorizer(CountVectorizer):
+class TfidfVectorizer(CountVectorizer):
+    """Vectorizes a corpus of documents into a count matrix
+    Performs term frequency, inverse document frequency and TF-IDF counting
+    functions
+    """
+
     def __init__(self) -> None:
         super().__init__()
         self.transformer = TfidfTransformer()
 
     def fit_transform(self, corpus: Iterable) -> list:
+        """Calculates the TF-IDF matrix based on the corpus of documents
+
+        Args:
+            corpus (Iterable): corpus of documents
+
+        Returns:
+            list: TF-IDF matrix
+        """
         count_matrix = super().fit_transform(corpus)
         return self.transformer.fit_transform(count_matrix)
-
-
-if __name__ == '__main__':
-    corpus1 = ['Crock Pot Pasta Never boil pasta again',
-               'Pasta Pomodoro Fresh ingredients Parmesan to taste']
-
-    tf_idf = TFIDF_Vectorizer()
-    print(tf_idf.fit_transform(corpus1))
