@@ -9,10 +9,10 @@ class CountVectorizer:
         tokenizing. Defaults to True.
     """
 
-    def __init__(self, lowercase: bool = True):
+    def __init__(self, lowercase: bool = True) -> None:
         self.lowercase = lowercase
 
-    def _preprocessing(self, raw_documents):
+    def _preprocessing(self, raw_documents: Iterable) -> list:
         """Preprocessing of the input corpus of texts."""
         for i, doc in enumerate(raw_documents):
             if not isinstance(doc, str):
@@ -21,7 +21,7 @@ class CountVectorizer:
                 raw_documents[i] = doc.lower()
         return raw_documents
 
-    def _create_vocabulary(self, raw_documents):
+    def _create_vocabulary(self, raw_documents: Iterable) -> None:
         """Сreates a vocabulary from corpus words."""
         # использую словарь, т.к. его ключи упорядочены
         voc = {}
@@ -30,7 +30,7 @@ class CountVectorizer:
                 voc[word] = voc.get(word, "")
         self._vocabulary = list(voc.keys())
 
-    def _create_token_matrix(self, raw_documents):
+    def _create_token_matrix(self, raw_documents: Iterable) -> None:
         """Creates and returns a token matrix. Before using this function,
         you need to call _create_vocabulary."""
         self._token_matrix = []
@@ -42,7 +42,7 @@ class CountVectorizer:
             # в следующей строке пользуюсь упорядоченностью словаря
             self._token_matrix.append(list(count_words.values()))
 
-    def _check_vocabulary(self):
+    def _check_vocabulary(self) -> None:
         """Check if vocabulary is empty or missing (not fitted)."""
         if not hasattr(self, "_vocabulary"):
             raise AttributeError("Vocabulary not fitted or provided")
