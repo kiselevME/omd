@@ -1,4 +1,4 @@
-# python -m pytest -v tests.py
+`python -m pytest -v tests.py`
 ============================================================================================= test session starts ==============================================================================================
 platform darwin -- Python 3.11.5, pytest-7.4.3, pluggy-1.3.0 -- /opt/homebrew/Caskroom/miniconda/base/envs/base_env/bin/python
 cachedir: .pytest_cache
