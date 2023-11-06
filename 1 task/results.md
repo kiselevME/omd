@@ -1,4 +1,4 @@
-# python -m doctest -o FAIL_FAST morse.py -v
+`python -m doctest -o FAIL_FAST morse.py -v`
 Trying:
     decode('... --- ...')
 Expecting:
