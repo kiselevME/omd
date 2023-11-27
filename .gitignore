@@ -10,3 +10,5 @@
 __pycache__/morse.cpython-311.pyc
 5 task/__pycache__/what_is_year_now.cpython-311.pyc
 .DS_Store
+__pycache__/tests.cpython-311-pytest-7.4.3.pyc
+__pycache__/hw_1.cpython-311.pyc
